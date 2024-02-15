@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" ngApp="app" ng-controller="global">
+
+	<base href="/"></base>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="google" content="notranslate" />
+
+	<title ng-bind="pageTitle">Castledown-learn-sheets-x3.png — Castledown — Typefaces — Images — Colophon Foundry</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+
+	<meta name="description" content="">
+	<meta name="author" content="Colophon Foundry">
+
+	<meta property="og:title" content="Castledown-learn-sheets-x3.png — Castledown — Typefaces — Images — Colophon Foundry" />
+	<meta property="og:url" content="https://www.colophon-foundry.org/images/typefaces/castledown/castledown-learn-sheets-x3.png" />
+	<meta property="og:image" content="https://www.colophon-foundry.org/images/fallback.jpg" />
+	<meta property="og:site_name" content="Colophon Foundry" />
+
+	<meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@colophonfoundry">
+    <meta name="twitter:title" content="Castledown-learn-sheets-x3.png — Castledown — Typefaces — Images — Colophon Foundry">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image:src" content="https://www.colophon-foundry.org/images/fallback.jpg">
+    <meta name="twitter:domain" content="www.colophon-foundry.org">
+
+	<script src="/cdn-cgi/apps/head/gG9N3PvfbNAPp9w-A6I32840fYk.js"></script><link rel="stylesheet" type="text/css" href="/css/colophon-foundry.css?v=0.0.1719">
+
+	<meta name="msapplication-square70x70logo" content="/icons/windows-tile-70x70.png">
+	<meta name="msapplication-square150x150logo" content="/icons/windows-tile-150x150.png">
+	<meta name="msapplication-square310x310logo" content="/icons/windows-tile-310x310.png">
+	<meta name="msapplication-TileImage" content="/icons/windows-tile-144x144.png">
+	<meta name="msapplication-TileColor" content="#fff">
+	<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/icons/apple-touch-icon-152x152-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="120x120" href="/icons/apple-touch-icon-120x120-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="76x76" href="/icons/apple-touch-icon-76x76-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="60x60" href="/icons/apple-touch-icon-60x60-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/icons/apple-touch-icon-144x144-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/icons/apple-touch-icon-114x114-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/icons/apple-touch-icon-72x72-precomposed.png">
+	<link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-touch-icon.png">
+	<meta name="mobile-web-app-capable" value="yes">
+	<link rel="icon" sizes="196x196" href="/icons/homescreen-196x196.png">
+	<link rel="shortcut icon" href="/icons/favicon.ico">
+	<link rel="icon" type="image/png" sizes="64x64" href="/icons/favicon.png">
+
+</head>
+<body class="{{bodyColour}} {{pathClass}}">
+
+	<header ng-controller="header">
+	<nav class="nav-center">
+		<h1><a href="/">
+		<span>Colophon Foundry</span>
+		<svg xmlns="http://www.w3.org/2000/svg" style="width:1.4rem; height:3rem" viewBox="0 0 100 121.45" preserveAspectRatio="xMinYMin">
+			<path d="M100,117.737c0,1.855-1.52,3.713-3.721,3.713c-0.337,0-0.674,0-1.183-0.172l-45.1-13.004l-45.1,13.004
+		c-0.509,0.172-0.846,0.172-1.183,0.172C1.52,121.45,0,119.592,0,117.737V17.228c0-1.857,0.839-3.212,2.703-3.714L48.305,0.337
+		C48.986,0.166,49.488,0,49.997,0c0.509,0,1.011,0.166,1.692,0.337l45.609,13.176c1.856,0.502,2.702,1.857,2.702,3.714V117.737z
+		M7.263,112.833l39.021-11.312V67.059C29.558,65.704,15.371,56.757,7.263,43.244V112.833z M46.283,8.445L7.428,19.758
+		c1.354,20.948,17.908,38.01,38.855,39.867V8.445z M53.711,59.625c20.947-1.857,37.5-18.919,38.855-39.867L53.711,8.445V59.625z
+		M92.731,43.244c-8.273,13.513-22.296,22.46-39.021,23.815v34.461l39.021,11.312V43.244z">
+	</path>
+		</svg>
+		</a></h1>
+	</nav> 
+	<nav class="nav-left">
+		<ul>
+			<li><a href="/typefaces/" ng-click="resetFilter()">Typefaces</a></li>
+			<li><a href="/goods/">Goods</a></li>
+			<li><a href="/custom/">Custom</a></li>
+			<li><a href="/buying-guide/">Buying Guide</a></li>
+		
+		</ul>
+	</nav>
+	<nav class="nav-right">
+		<ul>
+			<li><a href="/about/">About</a></li>
+			<li><a href="/information/licences/">Information</a></li>
+			<li><a href="/checkout/cart/">Cart <span class="cart-notify"></span></a></li>
+			<li><a href="/account/">Account</a></li>
+			<li ng-if="isAuthenticated()" ng-click="logout()">Logout</li>
+		</ul>
+	</nav>
+</header>
+
+
+	<article ui-view="main" autoscroll="false">
+		<div class="hidden">
+			
+		</div>
+	</article>
+
+	<footer ng-controller="footer" class="footerbot ">
+	<div class="footer-left">
+		<span class="email-link" el-user="abc" el-track-as="Footer"></span>
+	</div>
+	<div class="footer-center" ng-bind="message"></div>
+	<div class="footer-right">
+		<a href="tel:00442030959782">+44 (0)20 3095 9782</a>
+	</div>
+</footer>
+
+	<div class="preloader"></div>
+	<script src="https://js.braintreegateway.com/web/dropin/1.26.0/js/dropin.min.js"></script>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-7107352-2', 'auto');
+		ga('require', 'ec');
+		ga('set', 'currencyCode', 'GBP');
+		ga('send', 'pageview');
+
+	</script>
+	<script src="https://hcaptcha.com/1/api.js"></script>
+	
+	<script>
+	var settings = {
+		country: 'DE',
+		env: 'production',
+		
+		hCaptchaSiteKey: 'edb091c8-96f5-4198-ad62-3c3a665a8734',
+		allowGuest: false,
+		showHcapture: true
+	}
+	</script>
+	<!-- Hotjar Tracking Code -->
+	<script>
+	  (function(h,o,t,j,a,r){
+	    h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+	    h._hjSettings={hjid:1667558,hjsv:6};
+	    a=o.getElementsByTagName('head')[0];
+	    r=o.createElement('script');r.async=1;
+	    r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+	    a.appendChild(r);
+	  })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+	</script>
+	<!-- Facebook Pixel Code -->
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '604291233467047');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=604291233467047&ev=PageView&noscript=1"
+	/></noscript>
+	<!-- End Facebook Pixel Code -->
+
+		<script src="/js/colophon-foundry.min.js?v=0.0.1719"></script>
+	
+
+</body>
+</html>

@@ -1,32 +1,35 @@
 <template>
-  <div>
-    <audio controls @timeupdate="updateTime($event)">
-      <source src="../assets/audio_rossmann.m4a" type="audio/mpeg" />
-      Your browser does not support the audio element.
-    </audio>
-
-    <div class="container" v-if="jsonData">
-      <span
-        v-for="(word, index) in wordsWithAnnotations"
-        :key="index"
-        :class="{
-          highlight: currentWordIndices.includes(index),
-          word: !word.isAnnotation,
-          annotation: word.isAnnotation,
-        }"
-        :ref="currentWordIndices.includes(index) ? 'highlightedWord' : null"
-        :id="'word-' + index"
-      >
-        <span v-if="word.isAnnotation">
-          <strong>{{ word.user }}:</strong> {{ word.words }}
+  <section>
+    <header>
+      <audio controls @timeupdate="updateTime($event)">
+        <source src="../assets/audio_rossmann.m4a" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+    </header>
+      <div class="container" v-if="jsonData">
+        <span
+          v-for="(word, index) in wordsWithAnnotations"
+          :key="index"
+          :class="{
+            highlight: currentWordIndices.includes(index),
+            word: !word.isAnnotation,
+            annotation: word.isAnnotation,
+          }"
+          :ref="currentWordIndices.includes(index) ? 'highlightedWord' : null"
+          :id="'word-' + index"
+        >
+          <span v-if="word.isAnnotation">
+            <strong>{{ word.user }}:</strong> {{ word.words }}
+          </span>
+          <span v-else>
+            {{ word.words }}
+          </span>
         </span>
-        <span v-else>
-          {{ word.words }}
-        </span>
-      </span>
-    </div>
-    <p>Current time: {{ currentTime }}</p>
-  </div>
+      </div>
+    <footer class="time">
+      <p>Current time: {{ currentTime }}</p>
+    </footer>
+  </section>
 </template>
 
 <script>
@@ -120,20 +123,56 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+audio::-webkit-media-controls-play-button,
+audio::-webkit-media-controls-panel {
+  background-color: rgb(240,240,240);
+  color: #fff;
+
+}
+section {
+  display: grid;
+  justify-content: center;
+}
 .container {
+  padding:6.5rem;
+  font-size: 2.5rem;
+  line-height: 1.34;
+  letter-spacing: 0.01em;
+  max-width: 40ch;
   position: relative;
-  width: 100%;
-  height: 80vh;
+  height: calc(100vh - 13rem);
   display: flex;
   flex-wrap: wrap;
   overflow-y: scroll;
 }
+*::-webkit-scrollbar {
+  display: none;
+}
+.annotation {
+  display: inline-block;
+}
+header {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+footer {
+  position: absolute;
+  bottom: .5rem;
+  left: .5rem;
+  font-size: 1rem;
+  p {
+    margin: 0;
+    font-family: 'castledownReg';
+  }
+}
 .highlight {
-  font-weight: bold;
+  font-family: 'castledownDotted';
+  letter-spacing: 0.016em;
 }
 
 .word {
-  margin-right: 0.5em;
+  margin-right: 0.25em;
 }
 </style>
