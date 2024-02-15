@@ -1,10 +1,12 @@
 <template>
+  <section>
+    <header>
+      <audio controls @timeupdate="updateTime($event)">
+        <source src="../assets/audio_rossmann.m4a" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+    </header>
   <div>
-    <audio controls @timeupdate="updateTime($event)">
-      <source src="../assets/audio_rossmann.m4a" type="audio/mpeg" />
-      Your browser does not support the audio element.
-    </audio>
-    <p>Current time: {{ currentTime }}</p>
     <div class="container" v-if="jsonData">
       <span
         v-for="(item, index) in wordsWithAnnotations"
@@ -31,6 +33,10 @@
       </span>
     </div>
   </div>
+    <footer>
+      <p>Current time: {{ currentTime }}</p>
+    </footer>
+  </section>
 </template>
 
 <script>
@@ -150,11 +156,25 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+audio::-webkit-media-controls-play-button,
+audio::-webkit-media-controls-panel {
+  background-color: rgb(240,240,240);
+  color: #fff;
+
+}
+section {
+  display: grid;
+  justify-content: center;
+}
 .container {
+  padding:6.5rem;
+  font-size: 2.5rem;
+  line-height: 1.34;
+  letter-spacing: 0.01em;
+  max-width: 40ch;
   position: relative;
-  width: 100%;
-  height: 80vh;
+  height: calc(100vh - 13rem);
   display: flex;
   flex-wrap: wrap;
   overflow-y: scroll;
@@ -163,8 +183,30 @@ export default {
   font-size: 3em;
   padding: 0.5em;
 }
+*::-webkit-scrollbar {
+  display: none;
+}
+.annotation {
+  display: inline-block;
+}
+header {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+footer {
+  position: absolute;
+  bottom: .5rem;
+  left: .5rem;
+  font-size: 1rem;
+  p {
+    margin: 0;
+    font-family: 'castledownReg';
+  }
+}
 .highlight {
-  font-weight: bold;
+  font-family: 'castledownDotted';
+  letter-spacing: 0.016em;
 }
 
 .annotation {
@@ -178,6 +220,6 @@ export default {
 }
 
 .word {
-  margin-right: 0.5em;
+  margin-right: 0.25em;
 }
 </style>
