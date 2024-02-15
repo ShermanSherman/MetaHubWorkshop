@@ -4,7 +4,6 @@ import RossmannSynagoge from "./components/RossmannSynagoge.vue"
 </script>
 
 <template>
-  hi
   <RossmannSynagoge/>
 </template>
 
