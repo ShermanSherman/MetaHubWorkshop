@@ -17,12 +17,12 @@
         :ref="currentWordIndices.includes(index) ? 'highlightedWord' : null"
         :id="'word-' + index"
       >
-        <span v-if="item.isAnnotation">
-          {{ item.words }} <span class="username">{{ item.user }}</span> 
-        </span>
-        <span v-else>
+        <div v-if="item.isAnnotation">
+          {{ item.words }} <span class="username">{{ item.user }}</span>
+        </div>
+        <div v-else>
           {{ item.words }}
-        </span>
+        </div>
       </span>
     </div>
     <p>Current time: {{ currentTime }}</p>
@@ -72,39 +72,47 @@ export default {
       return indices;
     },
     wordsWithAnnotations() {
-    if (!this.jsonData || !this.annotations) return [];
-    let words = [...this.jsonData.data.words]; // Create a copy of the words array
-    let combined = [...words]; // Create a new array for combined words and annotations
-    let insertedAnnotations = 0; // Keep track of the number of inserted annotations
+      if (!this.jsonData || !this.annotations) return [];
+      let words = [...this.jsonData.data.words]; // Create a copy of the words array
+      let combined = [...words]; // Create a new array for combined words and annotations
 
-    this.annotations.rows.forEach((annotation) => {
-      // Extract the word index from the XPath expression
-      const xpath = annotation.target[0].selector.find(
-        (selector) => selector.type === "RangeSelector"
-      ).startContainer;
-      const match = xpath.match(/span\[(\d+)\]/);
+      // Sort the annotations by their position in the text
+      const sortedAnnotations = [...this.annotations.rows].sort((a, b) => {
+        const xpathA = a.target[0].selector.find(
+          (selector) => selector.type === "RangeSelector"
+        ).startContainer;
+        const xpathB = b.target[0].selector.find(
+          (selector) => selector.type === "RangeSelector"
+        ).startContainer;
+        const matchA = xpathA.match(/span\[(\d+)\]/);
+        const matchB = xpathB.match(/span\[(\d+)\]/);
+        return parseInt(matchA[1]) - parseInt(matchB[1]);
+      });
 
-      // Check if a match was found
-      if (match) {
-        const wordIndex = parseInt(match[1]) - 1;
+      sortedAnnotations.forEach((annotation) => {
+        // Extract the word index from the XPath expression
+        const xpath = annotation.target[0].selector.find(
+          (selector) => selector.type === "RangeSelector"
+        ).startContainer;
+        const match = xpath.match(/span\[(\d+)\]/);
 
-        // Adjust the index by the number of inserted annotations
-        const adjustedIndex = wordIndex + insertedAnnotations;
+        // Check if a match was found
+        if (match) {
+          const wordIndex = parseInt(match[1]) - 1;
 
-        // Insert the annotation at the correct position in the combined array
-        combined.splice(adjustedIndex, 0, {
-          words: annotation.text,
-          user: annotation.user_info ? annotation.user_info.display_name : annotation.user,
-          isAnnotation: true,
-        });
+          // Insert the annotation at the correct position in the combined array
+          combined.splice(wordIndex, 0, {
+            words: annotation.text,
+            user: annotation.user_info
+              ? annotation.user_info.display_name
+              : annotation.user,
+            isAnnotation: true,
+          });
+        }
+      });
 
-        // Increase the count of inserted annotations
-        insertedAnnotations++;
-      }
-    });
-
-    return combined;
-  },
+      return combined;
+    },
   },
   methods: {
     updateTime(event) {
@@ -144,9 +152,9 @@ export default {
   font-weight: bold;
 }
 
-.annotation{
-    font-size: 9px;
-    border: 1px solid grey;
+.annotation {
+  font-size: 9px;
+  border: 1px solid grey;
 }
 
 .word {
