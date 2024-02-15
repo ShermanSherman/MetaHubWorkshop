@@ -4,7 +4,7 @@
       <source src="../assets/audio_rossmann.m4a" type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio>
-
+    <p>Current time: {{ currentTime }}</p>
     <div class="container" v-if="jsonData">
       <span
         v-for="(item, index) in wordsWithAnnotations"
@@ -18,14 +18,18 @@
         :id="'word-' + index"
       >
         <div v-if="item.isAnnotation">
-          {{ item.words }} <span class="username">{{ item.user }}</span>
+          <div v-if="item.isImage">
+            <img :src="item.words" alt="Annotation image" />
+          </div>
+          <div v-else>
+            {{ item.words }} <span class="username">{{ item.user }}</span>
+          </div>
         </div>
         <div v-else>
           {{ item.words }}
         </div>
       </span>
     </div>
-    <p>Current time: {{ currentTime }}</p>
   </div>
 </template>
 
@@ -93,20 +97,27 @@ export default {
         // Extract the word index from the XPath expression
         const xpath = annotation.target[0].selector.find(
           (selector) => selector.type === "RangeSelector"
-        ).startContainer;
+        ).endContainer; // Use endContainer to get the end of the annotation range
         const match = xpath.match(/span\[(\d+)\]/);
 
         // Check if a match was found
         if (match) {
-          const wordIndex = parseInt(match[1]) - 1;
+          let wordIndex = parseInt(match[1]);
+
+          // Check if the annotation text is an image URL
+          const imageUrlPattern = /!\[\]\((http[s]?:\/\/.*\.(?:png|jpg|jpeg|gif))\)/i;
+          const imageUrlMatch = annotation.text.match(imageUrlPattern);
+          const isImage = !!imageUrlMatch;
+          const text = isImage ? imageUrlMatch[1] : annotation.text;
 
           // Insert the annotation at the correct position in the combined array
           combined.splice(wordIndex, 0, {
-            words: annotation.text,
+            words: text,
             user: annotation.user_info
               ? annotation.user_info.display_name
               : annotation.user,
             isAnnotation: true,
+            isImage: isImage,
           });
         }
       });
@@ -147,14 +158,23 @@ export default {
   display: flex;
   flex-wrap: wrap;
   overflow-y: scroll;
+  box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.5),
+    inset 0 -10px 10px -10px rgba(0, 0, 0, 0.5);
+  font-size: 3em;
+  padding: 0.5em;
 }
 .highlight {
   font-weight: bold;
 }
 
 .annotation {
-  font-size: 9px;
+  font-size: 0.5em;
   border: 1px solid grey;
+  margin-right: 0.5em;
+}
+
+.annotation img{
+    width: 20em;
 }
 
 .word {
