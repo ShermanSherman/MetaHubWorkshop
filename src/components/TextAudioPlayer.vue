@@ -1,10 +1,12 @@
 <template>
+  <section>
+    <header>
+      <audio controls @timeupdate="updateTime($event)">
+        <source src="../assets/audio_rossmann.m4a" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+    </header>
   <div>
-    <audio controls @timeupdate="updateTime($event)">
-      <source src="../assets/audio_rossmann.m4a" type="audio/mpeg" />
-      Your browser does not support the audio element.
-    </audio>
-
     <div class="container" v-if="jsonData">
       <span
         v-for="(item, index) in wordsWithAnnotations"
@@ -25,8 +27,12 @@
         </div>
       </span>
     </div>
-    <p>Current time: {{ currentTime }}</p>
+    
   </div>
+    <footer>
+      <p>Current time: {{ currentTime }}</p>
+    </footer>
+  </section>
 </template>
 
 <script>
