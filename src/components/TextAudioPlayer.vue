@@ -1,35 +1,32 @@
 <template>
-  <section>
-    <header>
-      <audio controls @timeupdate="updateTime($event)">
-        <source src="../assets/audio_rossmann.m4a" type="audio/mpeg" />
-        Your browser does not support the audio element.
-      </audio>
-    </header>
-      <div class="container" v-if="jsonData">
-        <span
-          v-for="(word, index) in wordsWithAnnotations"
-          :key="index"
-          :class="{
-            highlight: currentWordIndices.includes(index),
-            word: !word.isAnnotation,
-            annotation: word.isAnnotation,
-          }"
-          :ref="currentWordIndices.includes(index) ? 'highlightedWord' : null"
-          :id="'word-' + index"
-        >
-          <span v-if="word.isAnnotation">
-            <strong>{{ word.user }}:</strong> {{ word.words }}
-          </span>
-          <span v-else>
-            {{ word.words }}
-          </span>
-        </span>
-      </div>
-    <footer class="time">
-      <p>Current time: {{ currentTime }}</p>
-    </footer>
-  </section>
+  <div>
+    <audio controls @timeupdate="updateTime($event)">
+      <source src="../assets/audio_rossmann.m4a" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+
+    <div class="container" v-if="jsonData">
+      <span
+        v-for="(item, index) in wordsWithAnnotations"
+        :key="index"
+        :class="{
+          highlight: currentWordIndices.includes(index),
+          word: !item.isAnnotation,
+          annotation: item.isAnnotation,
+        }"
+        :ref="currentWordIndices.includes(index) ? 'highlightedWord' : null"
+        :id="'word-' + index"
+      >
+        <div v-if="item.isAnnotation">
+          {{ item.words }} <span class="username">{{ item.user }}</span>
+        </div>
+        <div v-else>
+          {{ item.words }}
+        </div>
+      </span>
+    </div>
+    <p>Current time: {{ currentTime }}</p>
+  </div>
 </template>
 
 <script>
@@ -66,37 +63,56 @@ export default {
       if (!this.jsonData) return [];
       let indices = [];
 
-      this.jsonData.data.words.forEach((word, index) => {
-        if (this.currentTime >= word.start) {
-          indices = [...Array(index + 1).keys()];
+      this.wordsWithAnnotations.forEach((item, index) => {
+        if (!item.isAnnotation && this.currentTime >= item.start) {
+          indices.push(index);
         }
       });
+
       return indices;
     },
     wordsWithAnnotations() {
-    if (!this.jsonData || !this.annotations) return [];
-    let words = [...this.jsonData.data.words]; // Create a copy of the words array
+      if (!this.jsonData || !this.annotations) return [];
+      let words = [...this.jsonData.data.words]; // Create a copy of the words array
+      let combined = [...words]; // Create a new array for combined words and annotations
 
-    this.annotations.rows.forEach(annotation => {
-      // Extract the word index from the XPath expression
-      const xpath = annotation.target[0].selector.find(selector => selector.type === 'RangeSelector').startContainer;
-      const match = xpath.match(/span\[(\d+)\]/);
-      
-      // Check if a match was found
-      if (match) {
-        const wordIndex = parseInt(match[1]) - 1;
+      // Sort the annotations by their position in the text
+      const sortedAnnotations = [...this.annotations.rows].sort((a, b) => {
+        const xpathA = a.target[0].selector.find(
+          (selector) => selector.type === "RangeSelector"
+        ).startContainer;
+        const xpathB = b.target[0].selector.find(
+          (selector) => selector.type === "RangeSelector"
+        ).startContainer;
+        const matchA = xpathA.match(/span\[(\d+)\]/);
+        const matchB = xpathB.match(/span\[(\d+)\]/);
+        return parseInt(matchA[1]) - parseInt(matchB[1]);
+      });
 
-        // Insert the annotation at the correct position
-        words.splice(wordIndex, 0, {
-          words: annotation.text,
-          user: annotation.user,
-          isAnnotation: true
-        });
-      }
-    });
+      sortedAnnotations.forEach((annotation) => {
+        // Extract the word index from the XPath expression
+        const xpath = annotation.target[0].selector.find(
+          (selector) => selector.type === "RangeSelector"
+        ).startContainer;
+        const match = xpath.match(/span\[(\d+)\]/);
 
-    return words;
-  }
+        // Check if a match was found
+        if (match) {
+          const wordIndex = parseInt(match[1]) - 1;
+
+          // Insert the annotation at the correct position in the combined array
+          combined.splice(wordIndex, 0, {
+            words: annotation.text,
+            user: annotation.user_info
+              ? annotation.user_info.display_name
+              : annotation.user,
+            isAnnotation: true,
+          });
+        }
+      });
+
+      return combined;
+    },
   },
   methods: {
     updateTime(event) {
@@ -170,6 +186,11 @@ footer {
 .highlight {
   font-family: 'castledownDotted';
   letter-spacing: 0.016em;
+}
+
+.annotation {
+  font-size: 9px;
+  border: 1px solid grey;
 }
 
 .word {
