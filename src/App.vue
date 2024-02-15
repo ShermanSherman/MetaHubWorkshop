@@ -5,6 +5,7 @@ import TextAudioPlayer from "./components/TextAudioPlayer.vue"
 </script>
 
 <template>
+  <!-- <RossmannSynagoge/> -->
   <TextAudioPlayer/>
 </template>
 
