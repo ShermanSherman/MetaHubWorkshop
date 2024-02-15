@@ -14,6 +14,7 @@ export default {
 <style scoped>
   .container {
     position: relative;
+
   }
    img {
      width: 400px;
