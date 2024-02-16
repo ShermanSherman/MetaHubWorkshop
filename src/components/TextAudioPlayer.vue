@@ -282,6 +282,7 @@ header {
   }
   ul {
     list-style: none;
+    margin: 0;
   }
 }
 
@@ -303,9 +304,7 @@ section {
     inset 0 -10px 10px -10px rgba(0, 0, 0, 0.5);
   padding: 0.5em;
 
-  span {
-    border: 1px solid rgb(216, 216, 216);
-  }
+
 }
 *::-webkit-scrollbar {
   display: none;
