@@ -1,5 +1,5 @@
 <script setup>
-import {marked} from 'marked';
+import { marked } from "marked";
 </script>
 <template>
   <section>
@@ -17,13 +17,19 @@ import {marked} from 'marked';
         @input="changeTime"
       />
       <ul>
-        <li v-for="(color, user) in userColors" :key="user">
+        <li
+          v-for="(color, user) in userColors"
+          :key="user"
+          :style="{ backgroundColor: color }"
+        >
           <input type="checkbox" :id="user" v-model="userColors[user].checked" />
           <label :for="user">{{ user }}</label>
         </li>
+        <li @click="toggleWords">
+          <input type="checkbox" v-model="showWords" />Show Words
+        </li>
       </ul>
     </header>
-    <button @click="toggleWords">Hide Words</button>
     <div>
       <div class="container" v-if="jsonData">
         <span
@@ -39,7 +45,11 @@ import {marked} from 'marked';
         >
           <div
             v-if="item.isAnnotation"
-            :style="{ backgroundColor: userColors[item.user] }"
+            :style="{
+              backgroundColor: userColors[item.user],
+              fontSize: scaleFactor[index]+'em',
+              maxWidth: scaleFactor[index]*20+'em',
+            }"
           >
             <div v-html="item.words"></div>
             <span class="username">{{ item.user }}</span>
@@ -96,6 +106,19 @@ export default {
     },
   },
   computed: {
+    scaleFactor() {
+      const lastHighlightedIndex = this.currentWordIndices[
+        this.currentWordIndices.length - 1
+      ];
+      return this.wordsWithAnnotations.map((item, index) => {
+        const distance = Math.abs(index - lastHighlightedIndex);
+        if (distance <= 3) {
+          return 1 + (3 - distance) * 0.2; // Adjust the scaling factor as needed
+        } else {
+          return 1;
+        }
+      });
+    },
     currentWordIndices() {
       if (!this.jsonData) return [];
       let indices = [];
@@ -158,8 +181,8 @@ export default {
     },
   },
   methods: {
-    toggleWords(event){
-      console.log(this.showWords)
+    toggleWords(event) {
+      console.log(this.showWords);
       this.showWords = !this.showWords;
     },
     updateTime(event) {
@@ -218,19 +241,19 @@ audio::-webkit-media-controls-panel {
   color: #fff;
 }
 input[type="range"]::-webkit-slider-runnable-track {
-  background: rgb(100,100,100);
+  background: rgb(100, 100, 100);
   height: 1px;
 }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default look */
   appearance: none;
-  margin-top: -.5em; /* Centers thumb on the track */
+  margin-top: -0.5em; /* Centers thumb on the track */
   //background-color: black;
   color: red;
   //height: 2rem;
   //width: 10rem;
 }
-input[type=range]::-webkit-slider-thumb {
+input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   border: none;
   height: 16px;
@@ -251,7 +274,7 @@ header {
     border: none;
     font-size: 1rem;
     text-transform: uppercase;
-    letter-spacing: .15em;
+    letter-spacing: 0.15em;
     width: 10rem;
   }
   input[type="range"] {
@@ -272,7 +295,7 @@ section {
   line-height: 1.34;
   letter-spacing: 0.01em;
   position: relative;
-  //height: calc(100vh - 13rem);
+  height: calc(100vh - 13rem);
   display: flex;
   flex-wrap: wrap;
   overflow-y: scroll;
@@ -280,7 +303,7 @@ section {
     inset 0 -10px 10px -10px rgba(0, 0, 0, 0.5);
   padding: 0.5em;
 
-  span{
+  span {
     border: 1px solid rgb(216, 216, 216);
   }
 }
@@ -309,7 +332,16 @@ footer {
 .annotation {
   font-size: 0.5em;
   margin-right: 0.5em;
+
+  transition: all 0.3s ease; // Adjust the duration and easing function as needed
+}
+
+.annotation > div{
   max-width: 20em;
+}
+.annotation div{
+  transition: all 1s ease; // Adjust the duration and easing function as needed
+
 }
 
 
@@ -327,5 +359,4 @@ footer {
 img {
   display: block;
 }
-
 </style>

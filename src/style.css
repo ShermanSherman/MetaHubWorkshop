@@ -25,3 +25,8 @@ img {
     width: 100%;
   }
 
+  iframe{
+    width: 12em;
+    height: 8em;
+  }
+
