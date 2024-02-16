@@ -20,7 +20,9 @@ import {marked} from 'marked';
     <div v-for="(color, user) in userColors" :key="user">
       <input type="checkbox" :id="user" v-model="userColors[user].checked" />
       <label :for="user">{{ user }}</label>
+      
     </div>
+    <button @click="toggleWords">Hide Words</button>
     <div>
       <div class="container" v-if="jsonData">
         <span
@@ -41,7 +43,7 @@ import {marked} from 'marked';
             <div v-html="item.words"></div>
             <span class="username">{{ item.user }}</span>
           </div>
-          <div v-else>
+          <div v-else v-if="showWords">
             {{ item.words }}
           </div>
         </span>
@@ -64,6 +66,7 @@ export default {
       annotations: null,
       userColors: {},
       isPlaying: false,
+      showWords: true,
       duration: 0,
     };
   },
@@ -154,6 +157,10 @@ export default {
     },
   },
   methods: {
+    toggleWords(event){
+      console.log(this.showWords)
+      this.showWords = !this.showWords;
+    },
     updateTime(event) {
       this.currentTime = event.target.currentTime;
     },
@@ -243,6 +250,10 @@ section {
     inset 0 -10px 10px -10px rgba(0, 0, 0, 0.5);
   font-size: 3em;
   padding: 0.5em;
+
+  span{
+    border: 1px solid rgb(216, 216, 216);
+  }
 }
 *::-webkit-scrollbar {
   display: none;
@@ -283,4 +294,6 @@ footer {
 .word {
   margin-right: 0.25em;
 }
+
+
 </style>

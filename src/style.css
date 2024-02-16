@@ -10,6 +10,10 @@
     font-family: "castledownDotted";
     src: url("assets/fonts/castledown-dotted-regular-pro.woff") format("woff");
 }
+html {
+    scroll-behavior: smooth;
+}
+
 
 body {
     font-family: 'castledownHeavy', Arial, Helvetica, sans-serif;
