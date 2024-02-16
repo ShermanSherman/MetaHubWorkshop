@@ -1,8 +1,7 @@
 <script setup>
 import { useRoute } from 'vue-router';
-import TextAudioPlayer from "../src/components/TextAudioPlayer.vue";
+import TextSourceComponent from "../src/components/TextSourceComponent.vue";
 
-console.log("hello");
 const route = useRoute();
 const id = route.params.id;
 const textsource = `/${id}.json`;
@@ -11,9 +10,8 @@ const hypothesissource = `https://mapping-offenbach.nodeforum.org/textsource/${i
 </script>
 
 <template>
-  <TextAudioPlayer 
+  <TextSourceComponent 
     :textsource="textsource" 
     :audiosource="audiosource" 
-    :hypothesissource="hypothesissource"
   />
 </template>

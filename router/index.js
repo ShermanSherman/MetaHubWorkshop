@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Home from "../views/Home.vue";
 import Text from "../views/Text.vue";
+import TextSource from "../views/TextSource.vue";
 
 const routes = [
   {
@@ -9,9 +10,16 @@ const routes = [
     component: Home,
   },
   {
-    path: "/text",
+    path: "/text/:id",
     name: "Text",
     component: Text,
+    props: true
+  },
+  {
+    path: "/textsource/:id",
+    name: "TextSource",
+    component: TextSource,
+    props: true
   },
 ];
 

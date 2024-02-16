@@ -1,38 +1,53 @@
 <template>
   <section>
     <header>
-      <audio controls @timeupdate="updateTime($event)">
-        <source src="../assets/audio_rossmann.m4a" type="audio/mpeg" />
+      <audio ref="audio" @timeupdate="updateTime($event)">
+        <source :src="audiosource" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
+      <button @click="togglePlay">{{ isPlaying ? "Pause" : "Play" }}</button>
+      <input
+        type="range"
+        min="0"
+        :max="duration"
+        v-model="currentTime"
+        @input="changeTime"
+      />
     </header>
-  <div>
-    <div class="container" v-if="jsonData">
-      <span
-        v-for="(item, index) in wordsWithAnnotations"
-        :key="index"
-        :class="{
-          highlight: currentWordIndices.includes(index),
-          word: !item.isAnnotation,
-          annotation: item.isAnnotation,
-        }"
-        :ref="currentWordIndices.includes(index) ? 'highlightedWord' : null"
-        :id="'word-' + index"
-      >
-        <div v-if="item.isAnnotation">
-          <div v-if="item.isImage">
-            <img :src="item.words" alt="Annotation image" />
+    <div v-for="(color, user) in userColors" :key="user">
+      <input type="checkbox" :id="user" v-model="userColors[user].checked" />
+      <label :for="user">{{ user }}</label>
+    </div>
+    <div>
+      <div class="container" v-if="jsonData">
+        <span
+          v-for="(item, index) in wordsWithAnnotations"
+          :key="index"
+          :class="{
+            highlight: currentWordIndices.includes(index),
+            word: !item.isAnnotation,
+            annotation: item.isAnnotation,
+          }"
+          :ref="currentWordIndices.includes(index) ? 'highlightedWord' : null"
+          :id="'word-' + index"
+        >
+          <div
+            v-if="item.isAnnotation"
+            :style="{ backgroundColor: userColors[item.user] }"
+          >
+            <div v-if="item.isImage">
+              <img :src="item.words" alt="Annotation image" />
+            </div>
+            <div v-else>
+              {{ item.words }} <span class="username">{{ item.user }}</span>
+            </div>
           </div>
           <div v-else>
-            {{ item.words }} <span class="username">{{ item.user }}</span>
+            {{ item.words }}
           </div>
-        </div>
-        <div v-else>
-          {{ item.words }}
-        </div>
-      </span>
+        </span>
+      </div>
     </div>
-  </div>
     <footer>
       <p>Current time: {{ currentTime }}</p>
     </footer>
@@ -42,12 +57,21 @@
 <script>
 export default {
   name: "TextAudioPlayer",
+  props: ['textsource', 'audiosource', 'hypothesissource'],
   data() {
     return {
       jsonData: null,
       currentTime: 0,
       annotations: null,
+      userColors: {},
+      isPlaying: false,
+      duration: 0,
     };
+  },
+  mounted() {
+    this.$refs.audio.addEventListener("loadedmetadata", () => {
+      this.duration = this.$refs.audio.duration;
+    });
   },
   watch: {
     currentWordIndices() {
@@ -99,16 +123,19 @@ export default {
         return parseInt(matchA[1]) - parseInt(matchB[1]);
       });
 
-      sortedAnnotations.forEach((annotation) => {
+      // Iterate over the annotations in reverse order
+      for (let i = sortedAnnotations.length - 1; i >= 0; i--) {
+        const annotation = sortedAnnotations[i];
         // Extract the word index from the XPath expression
         const xpath = annotation.target[0].selector.find(
           (selector) => selector.type === "RangeSelector"
         ).endContainer; // Use endContainer to get the end of the annotation range
         const match = xpath.match(/span\[(\d+)\]/);
-
+        console.log(xpath);
         // Check if a match was found
         if (match) {
           let wordIndex = parseInt(match[1]);
+          console.log(wordIndex, annotation.text);
 
           // Check if the annotation text is an image URL
           const imageUrlPattern = /!\[\]\((http[s]?:\/\/.*\.(?:png|jpg|jpeg|gif))\)/i;
@@ -126,7 +153,7 @@ export default {
             isImage: isImage,
           });
         }
-      });
+      }
 
       return combined;
     },
@@ -135,15 +162,29 @@ export default {
     updateTime(event) {
       this.currentTime = event.target.currentTime;
     },
+    togglePlay() {
+      if (this.isPlaying) {
+        this.$refs.audio.pause();
+      } else {
+        this.$refs.audio.play();
+      }
+      this.isPlaying = !this.isPlaying;
+    },
+    updateTime(event) {
+      this.currentTime = event.target.currentTime;
+    },
+    changeTime() {
+      this.$refs.audio.currentTime = this.currentTime;
+    },
   },
   async created() {
-    const response = await fetch("/Michael_Lenarz_Rossmann_Synagoge.json");
+    const response = await fetch(this.textsource);
     this.jsonData = await response.json();
     console.log(this.jsonData.data.words);
     const apiKey = "6879-eAvMUbHdA3Upm3zC8w4e9uTQnw4LkSnpHP2yd6v3X2U";
     const annotationsResponse = await fetch(
       "https://api.hypothes.is/api/search?uri=" +
-        encodeURIComponent(window.location.href),
+        encodeURIComponent(this.hypothesissource),
       {
         headers: {
           Authorization: `Bearer ${apiKey}`,
@@ -151,7 +192,18 @@ export default {
       }
     );
     this.annotations = await annotationsResponse.json();
-    console.log(this.annotations);
+    const users = [
+      ...new Set(
+        this.annotations.rows.map((a) =>
+          a.user_info ? a.user_info.display_name : a.user
+        )
+      ),
+    ];
+
+    // Assign a color to each user
+    users.forEach((user, index) => {
+      this.userColors[user] = `hsl(${(index / users.length) * 360}, 100%, 75%)`; // Change color generation as needed
+    });
   },
 };
 </script>
@@ -159,20 +211,34 @@ export default {
 <style lang="scss" scoped>
 audio::-webkit-media-controls-play-button,
 audio::-webkit-media-controls-panel {
-  background-color: rgb(240,240,240);
+  background-color: rgb(240, 240, 240);
   color: #fff;
-
 }
+
+header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  button {
+    margin-right: 10px;
+    background-color: none;
+    font-family: "castledownReg";
+    border: none;
+    font-size: 2em;
+  }
+  input[type="range"] {
+    flex-grow: 1;
+  }
+}
+
 section {
   display: grid;
   justify-content: center;
 }
 .container {
-  padding:6.5rem;
   font-size: 2.5rem;
   line-height: 1.34;
   letter-spacing: 0.01em;
-  max-width: 40ch;
   position: relative;
   height: calc(100vh - 13rem);
   display: flex;
@@ -189,34 +255,36 @@ section {
 .annotation {
   display: inline-block;
 }
-header {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
+
 footer {
   position: absolute;
-  bottom: .5rem;
-  left: .5rem;
+  bottom: 0.5rem;
+  left: 0.5rem;
   font-size: 1rem;
   p {
     margin: 0;
-    font-family: 'castledownReg';
+    font-family: "castledownReg";
   }
 }
 .highlight {
-  font-family: 'castledownDotted';
+  font-family: "castledownDotted";
   letter-spacing: 0.016em;
 }
 
 .annotation {
   font-size: 0.5em;
-  border: 1px solid grey;
   margin-right: 0.5em;
+  max-width: 20em;
 }
 
-.annotation img{
-    width: 20em;
+.annotation img {
+  width: 20em;
+}
+
+.annotation .username {
+  font-size: 0.5em;
+  font-family: "castledownDotted";
+  display: none;
 }
 
 .word {

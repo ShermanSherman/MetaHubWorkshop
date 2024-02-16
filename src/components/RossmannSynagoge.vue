@@ -6,10 +6,6 @@
       <img src="../assets/4.jpeg" alt="test">
       <img src="../assets/5_westwand.jpeg" alt="test">
       <img src="../assets/6_ostwand.jpeg" alt="test">
-      <img src="../assets/mueller-1.jpeg" alt="test">
-      <video width="216" height="384" autoplay muted>
-        <source src="../assets/PXL_20240213_092647771.TS_1.mp4" type="video/mp4">
-      </video>
     </div>
   </div>
 
