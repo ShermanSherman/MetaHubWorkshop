@@ -16,12 +16,13 @@ import {marked} from 'marked';
         v-model="currentTime"
         @input="changeTime"
       />
+      <ul>
+        <li v-for="(color, user) in userColors" :key="user">
+          <input type="checkbox" :id="user" v-model="userColors[user].checked" />
+          <label :for="user">{{ user }}</label>
+        </li>
+      </ul>
     </header>
-    <div v-for="(color, user) in userColors" :key="user">
-      <input type="checkbox" :id="user" v-model="userColors[user].checked" />
-      <label :for="user">{{ user }}</label>
-      
-    </div>
     <button @click="toggleWords">Hide Words</button>
     <div>
       <div class="container" v-if="jsonData">
@@ -216,6 +217,28 @@ audio::-webkit-media-controls-panel {
   background-color: rgb(240, 240, 240);
   color: #fff;
 }
+input[type="range"]::-webkit-slider-runnable-track {
+  background: rgb(100,100,100);
+  height: 1px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  margin-top: -.5em; /* Centers thumb on the track */
+  //background-color: black;
+  color: red;
+  //height: 2rem;
+  //width: 10rem;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: goldenrod;
+  margin-top: -4px;
+}
 
 header {
   display: flex;
@@ -226,10 +249,16 @@ header {
     background-color: none;
     font-family: "castledownReg";
     border: none;
-    font-size: 2em;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    width: 10rem;
   }
   input[type="range"] {
     flex-grow: 1;
+  }
+  ul {
+    list-style: none;
   }
 }
 
@@ -238,17 +267,17 @@ section {
   justify-content: center;
 }
 .container {
-  font-size: 2.5rem;
+  font-size: 3rem;
+  //width: 70vw;
   line-height: 1.34;
   letter-spacing: 0.01em;
   position: relative;
-  height: calc(100vh - 13rem);
+  //height: calc(100vh - 13rem);
   display: flex;
   flex-wrap: wrap;
   overflow-y: scroll;
   box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.5),
     inset 0 -10px 10px -10px rgba(0, 0, 0, 0.5);
-  font-size: 3em;
   padding: 0.5em;
 
   span{
@@ -295,5 +324,8 @@ footer {
   margin-right: 0.25em;
 }
 
+img {
+  display: block;
+}
 
 </style>
