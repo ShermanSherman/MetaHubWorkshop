@@ -1,3 +1,6 @@
+<script setup>
+import {marked} from 'marked';
+</script>
 <template>
   <section>
     <header>
@@ -35,12 +38,8 @@
             v-if="item.isAnnotation"
             :style="{ backgroundColor: userColors[item.user] }"
           >
-            <div v-if="item.isImage">
-              <img :src="item.words" alt="Annotation image" />
-            </div>
-            <div v-else>
-              {{ item.words }} <span class="username">{{ item.user }}</span>
-            </div>
+            <div v-html="item.words"></div>
+            <span class="username">{{ item.user }}</span>
           </div>
           <div v-else>
             {{ item.words }}
@@ -57,7 +56,7 @@
 <script>
 export default {
   name: "TextAudioPlayer",
-  props: ['textsource', 'audiosource', 'hypothesissource'],
+  props: ["textsource", "audiosource", "hypothesissource"],
   data() {
     return {
       jsonData: null,
@@ -137,11 +136,8 @@ export default {
           let wordIndex = parseInt(match[1]);
           console.log(wordIndex, annotation.text);
 
-          // Check if the annotation text is an image URL
-          const imageUrlPattern = /!\[\]\((http[s]?:\/\/.*\.(?:png|jpg|jpeg|gif))\)/i;
-          const imageUrlMatch = annotation.text.match(imageUrlPattern);
-          const isImage = !!imageUrlMatch;
-          const text = isImage ? imageUrlMatch[1] : annotation.text;
+          // Convert the annotation text from Markdown to HTML
+          const text = marked(annotation.text);
 
           // Insert the annotation at the correct position in the combined array
           combined.splice(wordIndex, 0, {
@@ -150,7 +146,6 @@ export default {
               ? annotation.user_info.display_name
               : annotation.user,
             isAnnotation: true,
-            isImage: isImage,
           });
         }
       }
@@ -277,9 +272,7 @@ footer {
   max-width: 20em;
 }
 
-.annotation img {
-  width: 20em;
-}
+
 
 .annotation .username {
   font-size: 0.5em;
