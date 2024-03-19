@@ -105,19 +105,6 @@ section {
   display: grid;
   justify-content: center;
 }
-.container {
-  font-size: 2.5rem;
-  line-height: 1.34;
-  letter-spacing: 0.01em;
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  overflow-y: scroll;
-  box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.5),
-    inset 0 -10px 10px -10px rgba(0, 0, 0, 0.5);
-  font-size: 3em;
-  padding: 0.5em;
-}
 *::-webkit-scrollbar {
   display: none;
 }

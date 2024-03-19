@@ -3,6 +3,9 @@ import { marked } from "marked";
 </script>
 <template>
   <section>
+    <div id="print_title">
+      Mapping Offenbach
+    </div>
     <header>
       <audio ref="audio" @timeupdate="updateTime($event)">
         <source :src="audiosource" type="audio/mpeg" />
@@ -46,7 +49,7 @@ import { marked } from "marked";
           <div
             v-if="item.isAnnotation"
             :style="{
-              backgroundColor: userColors[item.user],
+              color: userColors[item.user],
               fontSize: scaleFactor[index]+'em',
               maxWidth: scaleFactor[index]*20+'em',
             }"
@@ -60,9 +63,9 @@ import { marked } from "marked";
         </span>
       </div>
     </div>
-    <footer>
+    <!-- <footer>
       <p>Current time: {{ currentTime }}</p>
-    </footer>
+    </footer> -->
   </section>
 </template>
 
@@ -113,9 +116,9 @@ export default {
       return this.wordsWithAnnotations.map((item, index) => {
         const distance = Math.abs(index - lastHighlightedIndex);
         if (distance <= 3) {
-          return 1 + (3 - distance) * 0.2; // Adjust the scaling factor as needed
+          return 1.2 + (3 - distance) * 0.2; // Adjust the scaling factor as needed
         } else {
-          return 1;
+          return 1.2;
         }
       });
     },
@@ -226,9 +229,10 @@ export default {
       ),
     ];
 
-    // Assign a color to each user
+    // Assign a color to each user from a predefined list of colors
+    const colorList = ["#623CEA", "#FF715B", "#1EA896", "#a3bcf5", "#31E981", "#A36D90"];
     users.forEach((user, index) => {
-      this.userColors[user] = `hsl(${(index / users.length) * 360}, 100%, 75%)`; // Change color generation as needed
+      this.userColors[user] = colorList[index % colorList.length];
     });
   },
 };
@@ -263,49 +267,13 @@ input[type="range"]::-webkit-slider-thumb {
   margin-top: -4px;
 }
 
-header {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  button {
-    margin-right: 10px;
-    background-color: none;
-    font-family: "castledownReg";
-    border: none;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    width: 10rem;
-  }
-  input[type="range"] {
-    flex-grow: 1;
-  }
-  ul {
-    list-style: none;
-    margin: 0;
-  }
-}
 
 section {
   display: grid;
   justify-content: center;
 }
-.container {
-  font-size: 3rem;
-  //width: 70vw;
-  line-height: 1.34;
-  letter-spacing: 0.01em;
-  position: relative;
-  height: calc(100vh - 13rem);
-  display: flex;
-  flex-wrap: wrap;
-  overflow-y: scroll;
-  box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.5),
-    inset 0 -10px 10px -10px rgba(0, 0, 0, 0.5);
-  padding: 0.5em;
 
 
-}
 *::-webkit-scrollbar {
   display: none;
 }
