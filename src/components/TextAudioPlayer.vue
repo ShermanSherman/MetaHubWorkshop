@@ -102,7 +102,7 @@ export default {
             wordRect.bottom > containerRect.bottom ||
             wordRect.top < containerRect.top
           ) {
-            container.scrollTop += wordRect.top - containerRect.top;
+            container.scrollTop += wordRect.top - containerRect.top - 200;
           }
         }
       });
